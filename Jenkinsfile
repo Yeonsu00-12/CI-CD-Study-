@@ -9,7 +9,7 @@ pipeline {
   stage('Checkout') {
    steps {
     git branch: 'main',
-    url: 'https://github.com/Yeonsu00-12/Community_React.git'
+    url: 'https://github.com/Yeonsu00-12/CI-CD-Study-.git'
    }
   }
   stage('Build') {
