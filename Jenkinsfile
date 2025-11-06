@@ -1,5 +1,5 @@
 pipeline {
- agent any
+ agent none
 
  triggers {
   pollSCM('* * * * *')
@@ -7,6 +7,9 @@ pipeline {
 
  stages {
   stage('Checkout') {
+   agent {
+    docker { image 'maven:3-openjdk-17' }
+   }
    steps {
     git branch: 'main',
     url: 'https://github.com/Yeonsu00-12/CI-CD-Study-.git'
@@ -14,7 +17,7 @@ pipeline {
   }
   stage('Build') {
   agent {
-   docker { image 'maven:30openjdk-8' }
+   docker { image 'maven:3-openjdk-17' }
   }
   steps {
     sh 'mvn clean package'
