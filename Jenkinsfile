@@ -36,7 +36,10 @@ pipeline {
     label 'controller'
    }
    steps {
-    sh 'docker container run -d -p 80:8080 --name webserver tomcat:hello'
+    sh '''
+      docker rm -f webserver || true
+      docker run -d -p 80:8080 --name webserver tomcat:hello
+    '''
     ansiblePlaybook (playbook: 'Playbook.yaml')
    }
   }
