@@ -13,13 +13,27 @@ pipeline {
    }
   }
   stage('Build') {
-   steps {
+  agent {
+   docker { image 'maven:30openjdk-8' }
+  }
+  steps {
     sh 'mvn clean package'
    }
   }
-  stage('Deploy') {
+  stage('Image Build') {
+   agent {
+    label 'controller'
+   }
    steps {
-    deploy adapters: [tomcat9(credentialsId: 'tomcat-manager', url: 'http://192.168.56.102:8080')], contextPath: null, war : 'target/hello-world.war'
+    sh 'docker image build -t tomcat:hello .'
+   }
+  }
+  stage('Deploy') {
+   agent {
+    label 'controller'
+   }
+   steps {
+    sh 'docker container run -d -p 80:8080 --name webserver tomcat:hello'
    }
   }
  }
